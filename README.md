@@ -86,4 +86,14 @@ the Bazel sandbox. I added some logging to the `vite:build-html` plugin and here
 - `normalizedId`: `/private/var/tmp/_bazel_walkerburgin/e137f21f17bb052f4413ecef2c4599eb/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html`
 - `shortEmitName`: `../../../../../../../../../../../execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html`
 
-Note that the `normalizedId` path is outside of the sandbox
+Note that the `normalizedId` path is outside of the sandbox.
+
+Here are what the symlinks in the sandbox look like:
+
+```
+/private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/sandbox/darwin-sandbox/1/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app
+├── app.mjs -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/app.mjs
+├── app.mjs.map -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/app.mjs.map
+├── index.html -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html
+└── vite.config.mjs -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/vite.config.mjs
+```
