@@ -76,13 +76,14 @@ INFO: Build completed successfully, 2 total actions
 After comparing `rolldown-vite` with `vite`, I believe that the module ids in `rolldown-vite` are escaping
 the Bazel sandbox. I added some logging to the `vite:build-html` plugin and here's what I saw.
 
-In `vite`:
+**In `vite`:**
 - `config.root`: `/private/var/tmp/_bazel_walkerburgin/e137f21f17bb052f4413ecef2c4599eb/sandbox/darwin-sandbox/79/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app`
-- `normalizedId`: `/private/var/tmp/_bazel_walkerburgin/e137f21f17bb052f4413ecef2c4599eb/sandbox/darwin-sandbox/79/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html
+- `normalizedId`: `/private/var/tmp/_bazel_walkerburgin/e137f21f17bb052f4413ecef2c4599eb/sandbox/darwin-sandbox/79/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html`
 - `shortEmitName`: `index.html`
 
-In `rolldown-vite`:
+**In `rolldown-vite`:**
 - `config.root`:  `/private/var/tmp/_bazel_walkerburgin/e137f21f17bb052f4413ecef2c4599eb/sandbox/darwin-sandbox/21/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app`
 - `normalizedId`: `/private/var/tmp/_bazel_walkerburgin/e137f21f17bb052f4413ecef2c4599eb/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html`
-  * **NOTE** that this path is outside of `sandbox/darwin-sandbox`
-- shortEmitName: `../../../../../../../../../../../execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html`
+- `shortEmitName`: `../../../../../../../../../../../execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html`
+
+Note that the `normalizedId` path is outside of the sandbox
