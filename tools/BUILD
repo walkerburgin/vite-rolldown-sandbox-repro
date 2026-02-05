@@ -15,8 +15,11 @@ load("@bazel_env.bzl", "bazel_env")
 load("@bazelrc-preset.bzl", "bazelrc_preset")
 load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
 load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@npm//:vite/package_json.bzl", vite = "bin")
 
 package(default_visibility = ["//visibility:public"])
+
+vite.vite_binary(name = "vite")
 
 bazelrc_preset(
     name = "preset",
