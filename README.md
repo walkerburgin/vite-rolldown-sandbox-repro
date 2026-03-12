@@ -137,3 +137,50 @@ INFO: Elapsed time: 3.878s, Critical Path: 3.12s
 INFO: 230 processes: 124 internal, 101 darwin-sandbox, 5 local.
 ERROR: Build did NOT complete successfully
 ```
+
+If I modify `packages/foo-app/vite.config.mjs` to this:
+
+```js
+import { defineConfig } from "vite";
+import fs from "node:fs";
+import util from "node:util";
+
+const realpath = util.promisify(fs.realpath.native);
+
+export default defineConfig({
+    root: await realpath(import.meta.dirname),
+});
+
+```
+
+The build passes: 
+
+```bash
+➜  vite-rolldown-sandbox-repro git:(develop) ✗ bazel build //packages/foo-app:vite --sandbox_debug
+INFO: Analyzed target //packages/foo-app:vite (181 packages loaded, 9032 targets configured).
+INFO: Found 1 target...
+INFO: From JsRunBinary packages/foo-app/dist:
+vite v8.0.0 building client environment for production...
+transforming...✓ 4 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../../../../../execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/dist/index.html                0.14 kB │ gzip: 0.12 kB
+../../../../../../../../../../execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/dist/assets/index-YiMfhTXK.js  0.72 kB │ gzip: 0.41 kB
+
+✓ built in 18ms
+Target //packages/foo-app:vite up-to-date:
+  bazel-bin/packages/foo-app/dist
+INFO: Elapsed time: 4.045s, Critical Path: 2.92s
+INFO: 230 processes: 123 internal, 102 darwin-sandbox, 5 local.
+INFO: Build completed successfully, 230 total actions
+```
+
+And the `index.html` file is output in `bazel-bin` alongside the rest of the assets:
+
+```
+➜  vite-rolldown-sandbox-repro git:(develop) ✗ tree bazel-bin/packages/foo-app/dist
+bazel-bin/packages/foo-app/dist
+├── assets
+│   └── index-YiMfhTXK.js
+└── index.html
+```
