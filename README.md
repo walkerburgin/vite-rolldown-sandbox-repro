@@ -1,6 +1,6 @@
 # `vite-rolldown-sandbox-repro`
 
-## Repro
+## Repro (02/04/2026)
 
 Run `bazel build //packages/foo-app:vite`
 
@@ -96,4 +96,44 @@ Here are what the symlinks in the sandbox look like:
 ├── app.mjs.map -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/app.mjs.map
 ├── index.html -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html
 └── vite.config.mjs -> /private/var/tmp/_bazel_walkerburgin/32bf7be53319b4e2feed5a0cebe8773b/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/vite.config.mjs
+```
+
+## Update (03/12/2026)
+
+After bumping to `vite@8.0.0`, running `bazel build //packages/foo-app:vite` produces this error:
+
+```bash
+➜  vite-rolldown-sandbox-repro git:(develop) ✗ bazel build //packages/foo-app:vite
+INFO: Analyzed target //packages/foo-app:vite (2 packages loaded, 167 targets configured).
+INFO: Found 1 target...
+ERROR: /Users/wburgin/Repositories/walkerburgin/vite-rolldown-sandbox-repro/packages/foo-app/BUILD:33:11: JsRunBinary packages/foo-app/dist failed: (Exit 1): vite failed: error executing JsRunBinary command (from target //packages/foo-app:vite) bazel-out/darwin_arm64-opt-exec-ST-d57f47055a04/bin/tools/vite_/vite build --config ../../packages/foo-app/vite.config.mjs
+
+Use --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging
+✗ Build failed in 18ms
+error during build:
+Build failed with 1 error:
+
+[plugin vite:build-html]
+Error: The "fileName" or "name" properties of emitted chunks and assets must be strings that are neither absolute nor relative paths, received "../../../../../../../../../../execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/packages/foo-app/index.html".
+    at PluginContextImpl.emitFile (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/rolldown@1.0.0-rc.9/node_modules/rolldown/dist/shared/bindingify-input-options-Cu7pt6SZ.mjs:903:23)
+    at PluginContextImpl.generateBundle (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/vite@8.0.0_at_types_node_25.5.0/node_modules/vite/dist/node/chunks/node.js:22411:10)
+    at async plugin (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/rolldown@1.0.0-rc.9/node_modules/rolldown/dist/shared/bindingify-input-options-Cu7pt6SZ.mjs:1294:4)
+    at async plugin.<computed> (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/rolldown@1.0.0-rc.9/node_modules/rolldown/dist/shared/bindingify-input-options-Cu7pt6SZ.mjs:1570:12)
+    at aggregateBindingErrorsIntoJsError (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/rolldown@1.0.0-rc.9/node_modules/rolldown/dist/shared/error-CP8smW_P.mjs:48:18)
+    at unwrapBindingResult (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/rolldown@1.0.0-rc.9/node_modules/rolldown/dist/shared/error-CP8smW_P.mjs:18:128)
+    at #build (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/rolldown@1.0.0-rc.9/node_modules/rolldown/dist/shared/rolldown-build-4YnQkA76.mjs:3311:34)
+    at async buildEnvironment (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/vite@8.0.0_at_types_node_25.5.0/node_modules/vite/dist/node/chunks/node.js:32794:64)
+    at async Object.build (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/vite@8.0.0_at_types_node_25.5.0/node_modules/vite/dist/node/chunks/node.js:33216:19)
+    at async Object.buildApp (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/vite@8.0.0_at_types_node_25.5.0/node_modules/vite/dist/node/chunks/node.js:33213:153)
+    at async CAC.<anonymous> (file:///private/var/tmp/_bazel_wburgin/a445ef3cc4d16c0c48261b5007ab73bb/sandbox/darwin-sandbox/2339/execroot/_main/bazel-out/darwin_arm64-fastbuild/bin/node_modules/.aspect_rules_js/vite@8.0.0_at_types_node_25.5.0/node_modules/vite/dist/node/cli.js:778:3) {
+  errors: [Getter/Setter]
+}
+vite v8.0.0 building client environment for production...
+transforming...✓ 4 modules transformed.
+rendering chunks...
+Target //packages/foo-app:vite failed to build
+Use --verbose_failures to see the command lines of failed build steps.
+INFO: Elapsed time: 3.878s, Critical Path: 3.12s
+INFO: 230 processes: 124 internal, 101 darwin-sandbox, 5 local.
+ERROR: Build did NOT complete successfully
 ```
